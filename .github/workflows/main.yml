@@ -1,0 +1,25 @@
+name: Flutter_Build_Action
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  compilacao:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonando o repositório
+        uses: actions/checkout@v4
+
+      - name: Criando Imagem Docker e Buildando APK
+        run: |
+          docker build -t build-imc .
+          docker create --name content build-imc
+          docker cp content:/app/build/app/outputs/flutter-apk/app-release.apk ./calculadora.apk
+          docker rm content
+
+      - name: Disponibilizar APK para Download
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-final-build
+          path: calculadora.apk
