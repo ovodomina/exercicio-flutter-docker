@@ -1,5 +1,5 @@
-name: exercicio-flutter-docker
-description: Projeto de Calculadora IMC para aula de DevOps.
+name: exercicio_flutter_docker
+description: Projeto de Calculadora IMC Fatec
 publish_to: 'none'
 version: 1.0.0+1
 
