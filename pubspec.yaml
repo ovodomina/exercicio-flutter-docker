@@ -1,4 +1,4 @@
-name: calculadora_imc
+name: exercicio-flutter-docker
 description: Projeto de Calculadora IMC para aula de DevOps.
 publish_to: 'none'
 version: 1.0.0+1
