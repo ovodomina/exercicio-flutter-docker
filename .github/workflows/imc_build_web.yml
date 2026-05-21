@@ -1,0 +1,48 @@
+name: Build Web
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-web:
+    name: Build Web (Browser)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.0"
+          channel: stable
+          cache: true
+
+      - name: Instalar dependências
+        run: flutter pub get
+
+      - name: Verificar problemas no código
+        run: flutter analyze
+
+      - name: Rodar testes
+        run: flutter test
+
+      - name: Habilitar suporte web no Flutter
+        run: flutter config --enable-web
+
+      - name: Build Web (release)
+        run: flutter build web --release
+
+      - name: Upload dos arquivos web como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-web-build
+          path: build/web/
+          retention-days: 7
