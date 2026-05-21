@@ -34,6 +34,9 @@ jobs:
       - name: Habilitar suporte web no Flutter
         run: flutter config --enable-web
 
+      - name: Criar estrutura web (pasta web/ ausente no repositório)
+        run: flutter create . --platforms web
+
       - name: Build Web (release)
         run: flutter build web --release
 
