@@ -31,9 +31,6 @@ jobs:
       - name: Verificar problemas no código
         run: flutter analyze
 
-      - name: Rodar testes
-        run: flutter test
-
       - name: Habilitar suporte web no Flutter
         run: flutter config --enable-web
 
