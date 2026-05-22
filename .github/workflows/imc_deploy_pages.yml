@@ -1,4 +1,4 @@
-name: Deploy Pages
+name: Build Web
 
 on:
   workflow_run:
@@ -15,16 +15,12 @@ permissions:
   actions: read
 
 jobs:
-  deploy:
-    name: Publicar no GitHub Pages
+  build-web:
+    name: Build Web (Browser)
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+<<<<<<< HEAD
       - name: Baixar artefato do workflow de build
         uses: actions/download-artifact@v4
         with:
@@ -41,3 +37,34 @@ jobs:
       - name: Deploy para o GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+=======
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.0"
+          channel: stable
+          cache: true
+
+      - name: Instalar dependências
+        run: flutter pub get
+
+      - name: Verificar problemas no código
+        run: flutter analyze
+
+      - name: Habilitar suporte web no Flutter
+        run: flutter config --enable-web
+
+      - name: Criar estrutura web (pasta web/ ausente no repositório)
+        run: flutter create . --platforms web --project-name exercicio_flutter_docker
+
+      - name: Build Web (release)
+        run: flutter build web --release --base-href /exercicio-flutter-docker/
+
+      - name: Preparar artefato para o Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web/
+>>>>>>> b132018dd42e8cd8668ce30f8094dfb6c0d937c5
