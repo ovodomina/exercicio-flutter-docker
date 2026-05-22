@@ -40,9 +40,7 @@ jobs:
       - name: Build Web (release)
         run: flutter build web --release
 
-      - name: Upload dos arquivos web como artefato
-        uses: actions/upload-artifact@v4
+      - name: Preparar artefato para o Pages
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: app-web-build
           path: build/web/
-          retention-days: 7
