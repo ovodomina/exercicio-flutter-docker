@@ -1,46 +1,46 @@
-name: Build Web
+name: Deploy Flutter Web to GitHub Pages
 
+# Executa o script toda vez que um push for feito na branch main
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+
+# Permissões estritamente necessárias para o GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build-web:
-    name: Build Web (Browser)
+  build_and_deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - name: Checkout do Repositório
+        uses: actions/checkout@v3
 
-      - name: Configurar Flutter
+      - name: Setup do Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.22.0"
-          channel: stable
-          cache: true
+          channel: 'stable'
 
-      - name: Instalar dependências
+      - name: Instalar Dependências
         run: flutter pub get
 
-      - name: Verificar problemas no código
-        run: flutter analyze
+      # ATENÇÃO ALUNOS: O base-href DEVE ser exatamente o nome do repositório!
+      - name: Build Flutter Web
+        run: flutter build web --release --base-href "/exercicio-flutter-docker/"
 
-      - name: Habilitar suporte web no Flutter
-        run: flutter config --enable-web
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v3
 
-      - name: Criar estrutura web (pasta web/ ausente no repositório)
-        run: flutter create . --platforms web --project-name exercicio_flutter_docker
-
-      - name: Build Web (release)
-        run: flutter build web --release --base-href /exercicio-flutter-docker/
-
-      - name: Preparar artefato para o Pages
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload do Artefato
+        uses: actions/upload-pages-artifact@v2
         with:
-          path: build/web/
+          # O caminho aponta para a pasta que o Flutter acabou de gerar
+          path: 'build/web'
+
+      - name: Deploy para o GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
