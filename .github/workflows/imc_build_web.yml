@@ -35,7 +35,7 @@ jobs:
         run: flutter config --enable-web
 
       - name: Criar estrutura web (pasta web/ ausente no repositório)
-        run: flutter create . --platforms web
+        run: flutter create . --platforms web --project-name exercicio_flutter_docker
 
       - name: Build Web (release)
         run: flutter build web --release
