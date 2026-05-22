@@ -38,7 +38,7 @@ jobs:
         run: flutter create . --platforms web --project-name exercicio_flutter_docker
 
       - name: Build Web (release)
-        run: flutter build web --release
+        run: flutter build web --release --base-href /exercicio-flutter-docker/
 
       - name: Preparar artefato para o Pages
         uses: actions/upload-pages-artifact@v3

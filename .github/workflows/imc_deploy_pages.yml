@@ -3,7 +3,7 @@ name: Deploy Pages
 on:
   workflow_run:
     workflows:
-      - "Build Web"  # deve ser exatamente o "name:" do workflow de build
+      - "Build Web"
     types:
       - completed
     branches:
@@ -12,6 +12,7 @@ on:
 permissions:
   pages: write
   id-token: write
+  actions: read
 
 jobs:
   deploy:
@@ -24,6 +25,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Baixar artefato do workflow de build
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./pages-artifact
+
+      - name: Reempacotar artefato para o Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./pages-artifact
+
       - name: Deploy para o GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
